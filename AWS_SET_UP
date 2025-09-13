@@ -1,0 +1,66 @@
+    AWS set of the RDS and EC2 connection  
+
+•	Open the aws acnt and search for rds (Relation database )  go to  Database and select create database.
+Easy create → Quick start, good for learning or dev/testing.
+•	Standard create → Full control, best for production or when you need specific configurations.
+         Select the option easy create and select the database 
+       •  If you’re just learning / practicing MySQL & RDS → Free tier (db.t4g.micro) is more than enough.
+•  If you’re building projects or want realistic testing → Dev/Test (db.r7g.large) is a good middle ground.
+•  If you’re deploying a real production app with users → Production (db.r7g.xlarge) is the safest
+•  Learning / Practice → Use Self-managed and set a password you can remember.
+•  Testing with security in mind → Use Auto-generate password but store it safely (e.g., in Notepad/Password Manager).
+•  Production → Go with Secrets Manager, since it’s the most secure and allows rotation.
+Create Database
+
+Verify RDS Status
+•	Go to AWS Console → RDS → Databases.
+•	Make sure your DB status is Available.
+1.	EC2 (Amazon Linux) to RDS MySQL Connection
+Now lauch  EC2 server with  RDS (Mysql port for Security G ) 
+Connectivity:
+o	VPC: choose same VPC as EC2.
+o	Public access: No (recommended), unless testing from laptop.
+o	VPC Security group: select/create one.
+
+       Software Image (AMI)
+Amazon Linux 2023 AMI 2023.8.2...read more
+ami-0b09ffb6d8b58ca91
+Virtual server type (instance type)
+t3.small
+Firewall (security group)
+web
+Storage (volumes)
+1 volume(s) - 15 GiB
+
+Lauch instance 
+
+
+mysql -h database-1.co3iac6i299b.us-east-1.rds.amazonaws.com -u admin -p
+MySQL [(none)]> CREATE DATABASE myappdb;
+Query OK, 1 row affected (0.021 sec)
+
+MySQL [(none)]> SHOW DATABASES;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| myappdb            |
+| mysql              |
+| performance_schema |
+| sys                |
++--------------------+
+5 rows in set (0.006 sec)
+
+[root@ip-172-31-29-23 ~]# mysql -h database-1.co3iac6i299b.us-east-1.rds.amazonaws.com -u admin -p myappdb --batch --silent < file.sql > file.csv
+
+vi file.sql 
+CREATE TABLE users (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(50),
+    email VARCHAR(50)
+);
+INSERT INTO users (name, email) VALUES ('Nagraj', 'nagraj@example.com');
+INSERT INTO users (name, email) VALUES ('Ravi', 'ravi@example.com');
+INSERT INTO users (name, email) VALUES ('Sita', 'sita@example.com');
+
+
